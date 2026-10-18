@@ -3,7 +3,7 @@ export const SITE = {
   name: '香遇幸福',
   tagline: '用一抹香氣，遇見生活裡的小幸福',
   // LINE 官方帳號加好友連結，例如 https://lin.ee/xxxxxxx
-  lineUrl: 'https://lin.ee/REPLACE_ME',
+  lineUrl: 'https://lin.ee/WKsWqDV',
   // 賣貨便賣場連結（商品沒有填自己的購買連結時，會連到這裡）
   shopUrl: 'https://myship.7-11.com.tw/REPLACE_ME',
   instagramUrl: '',

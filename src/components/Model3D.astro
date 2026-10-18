@@ -1,0 +1,88 @@
+---
+// 「看 3D」按鈕＋彈出視窗。按下去才下載 3D 檢視器和模型，不會拖慢商品頁。
+// 手機上可以按「在我的空間查看」用 AR 把商品放在桌上看實際大小。
+const { src, name } = Astro.props;
+---
+<button type="button" class="btn btn--ghost open-3d" data-model={src} data-name={name}>
+  <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="m3 7 9 5 9-5M12 12v10"/></svg>
+  看 3D
+</button>
+
+<dialog class="viewer-3d" aria-label={`${name} 3D 預覽`}>
+  <div class="viewer-head">
+    <p>{name}</p>
+    <button type="button" class="close-3d" aria-label="關閉 3D 預覽">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <model-viewer
+    class="mv"
+    alt={`${name} 的 3D 模型`}
+    camera-controls
+    touch-action="pan-y"
+    auto-rotate
+    shadow-intensity="1"
+    exposure="1.05"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    ar-scale="fixed"
+  >
+    <button slot="ar-button" class="btn btn--solid ar-btn">在我的空間查看</button>
+    <div slot="progress-bar" class="loading">3D 模型載入中…</div>
+  </model-viewer>
+  <p class="hint">用手指拖曳可以旋轉，兩指可以放大縮小。</p>
+</dialog>
+
+<script>
+  let loader;
+  document.querySelectorAll('.open-3d').forEach((btn) => {
+    const dialog = btn.nextElementSibling;
+    const mv = dialog.querySelector('model-viewer');
+    btn.addEventListener('click', async () => {
+      dialog.showModal();
+      loader ??= import('@google/model-viewer');
+      await loader;
+      if (!mv.getAttribute('src')) {
+        const loading = mv.querySelector('.loading');
+        mv.addEventListener('load', () => loading.remove(), { once: true });
+        mv.addEventListener('error', () => { loading.textContent = '3D 模型載入失敗，請稍後再試。'; }, { once: true });
+        mv.setAttribute('src', btn.dataset.model);
+      }
+    });
+    dialog.querySelector('.close-3d').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+  });
+</script>
+
+<style>
+  .viewer-3d {
+    width: min(92vw, 720px);
+    padding: 0;
+    border: none;
+    border-radius: 28px;
+    background: var(--plaster);
+    color: var(--ink);
+  }
+  .viewer-3d::backdrop { background: rgba(58, 36, 51, 0.55); }
+  .viewer-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 12px 0 24px;
+  }
+  .viewer-head p { font-family: var(--serif); font-weight: 700; font-size: var(--step-1); }
+  .close-3d {
+    width: 48px; height: 48px; display: grid; place-items: center;
+    border: none; border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer;
+  }
+  .close-3d:hover { background: var(--niche); }
+  .mv {
+    display: block; width: 100%; height: min(70vh, 520px);
+    background: radial-gradient(circle at 50% 45%, var(--white), var(--niche));
+    --poster-color: transparent;
+  }
+  .ar-btn { position: absolute; left: 50%; bottom: 16px; translate: -50% 0; }
+  .loading {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    color: var(--muted); font-size: var(--step--1);
+  }
+  .hint { padding: 12px 24px 20px; color: var(--muted); font-size: var(--step--1); }
+</style>

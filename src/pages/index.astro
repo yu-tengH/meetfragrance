@@ -1,0 +1,180 @@
+---
+import Base from '../layouts/Base.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getProducts } from '../lib/products.js';
+import { SITE } from '../lib/site.js';
+
+const products = await getProducts();
+const featured = products.filter((p) => p.featured).slice(0, 3);
+---
+<Base>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <h1 class="title"><span>香</span><span>遇</span><span>幸</span><span>福</span></h1>
+        <div class="hero-copy">
+          <p class="tagline">{SITE.tagline}</p>
+          <p class="lede">一朵一朵用石膏翻模、手工上色的擴香石，滴上精油，讓房間慢慢有了香氣。</p>
+          <div class="actions">
+            <a class="btn btn--solid" href="/products/">看全部商品</a>
+            <a class="btn btn--ghost" href={SITE.lineUrl} target="_blank" rel="noopener">LINE 詢問</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="niche arch"></div>
+        <img class="art art--peony" src="/images/peony.webp" alt="" />
+        <img class="art art--hydrangea" src="/images/hydrangea.webp" alt="" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head-row">
+        <h2 class="section-title">店主推薦</h2>
+        <a href="/products/">全部商品</a>
+      </div>
+      <div class="grid">
+        {featured.map((p) => <ProductCard product={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section story" id="story">
+    <div class="wrap story-grid">
+      <div class="niche story-photo">
+        <img src={SITE.ownerPhoto} alt="香遇幸福的店主" loading="lazy" style={`object-position: ${SITE.ownerPhotoFocus || '50% 0%'}`} />
+      </div>
+      <div class="story-text">
+        <h2 class="section-title">從一朵石膏花開始</h2>
+        <p>[這裡放姑姑自己寫的品牌故事。例如：為什麼開始做擴香石、最喜歡哪一種香味、想把什麼樣的感覺送給大家。]</p>
+        <p>每一顆擴香石都是手工翻模、等它乾透後再一筆一筆上色，所以每顆的顏色和紋路都會有一點點不同。</p>
+        <p class="sign">香遇幸福 店主</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="wrap">
+      <h2 class="section-title">怎麼購買</h2>
+      <ol class="steps">
+        <li>
+          <h3>挑選商品</h3>
+          <p>在商品頁看好喜歡的款式和香味，有問題可以先用 LINE 問我。</p>
+        </li>
+        <li>
+          <h3>到賣貨便下單</h3>
+          <p>按「到賣貨便購買」，填寫取貨門市，選擇取貨付款。</p>
+        </li>
+        <li>
+          <h3>到 7-11 取貨</h3>
+          <p>商品寄到門市後會收到簡訊通知，到店取貨時再付款。</p>
+        </li>
+      </ol>
+      <div class="line-cta">
+        <p>想先聞聞看、或想訂製送禮？加 LINE 直接跟我聊。</p>
+        <a class="btn btn--solid" href={SITE.lineUrl} target="_blank" rel="noopener">加 LINE 好友</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-block: clamp(40px, 7vw, 88px) clamp(56px, 8vw, 104px); overflow: hidden; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 5vw, 64px);
+    align-items: center;
+  }
+  .hero-text { display: flex; gap: clamp(20px, 4vw, 48px); align-items: flex-start; }
+  .title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.14em;
+    font-size: var(--step-4);
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .title span { display: block; }
+  .hero-copy { display: grid; gap: 20px; padding-top: 8px; max-width: 22em; }
+  .tagline {
+    font-family: var(--serif); font-weight: 500;
+    font-size: var(--step-2); line-height: 1.5; letter-spacing: 0.08em;
+  }
+  .lede { color: var(--muted); }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+
+  .hero-art { position: relative; aspect-ratio: 5 / 6; }
+  .arch { position: absolute; inset: 0 6% 0 10%; border-radius: 999px 999px 24px 24px; }
+  .art { position: absolute; filter: drop-shadow(0 22px 24px rgba(58, 36, 51, 0.25)); }
+  .art--peony {
+    width: 74%; left: 2%; bottom: 6%;
+    animation: bloom 1.2s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .art--hydrangea {
+    width: 52%; right: 0; top: 6%; transform: rotate(9deg);
+    animation: bloom 1.2s 0.25s cubic-bezier(.2,.7,.2,1) both;
+  }
+  @keyframes bloom {
+    from { opacity: 0; translate: 0 24px; scale: 0.94; }
+    to { opacity: 1; translate: 0 0; scale: 1; }
+  }
+
+  @media (max-width: 820px) {
+    .hero-grid { grid-template-columns: minmax(0, 1fr); }
+    .hero-art { max-width: 420px; width: 100%; margin-inline: auto; order: -1; }
+  }
+
+  .head-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: clamp(24px, 4vw, 48px);
+  }
+
+  .story { background: var(--white); }
+  .story-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(32px, 6vw, 88px);
+    align-items: center;
+  }
+  .story-photo { aspect-ratio: 3 / 4; max-width: 400px; }
+  .story-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .story-text { display: grid; gap: 1em; max-width: 34em; }
+  .story-text p { font-family: var(--serif); line-height: 2; }
+  .sign { color: var(--muted); font-family: var(--sans) !important; }
+  @media (max-width: 820px) {
+    .story-grid { grid-template-columns: minmax(0, 1fr); }
+    .story-photo { width: 100%; margin-inline: auto; }
+  }
+
+  .steps {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 32px; counter-reset: step;
+  }
+  .steps li {
+    counter-increment: step;
+    display: grid; gap: 8px;
+    padding-top: 20px; border-top: 2px solid var(--ink);
+  }
+  .steps li::before {
+    content: counter(step);
+    font-family: var(--serif); font-weight: 900; font-size: var(--step-3);
+    line-height: 1; color: var(--mauve);
+  }
+  .steps h3 { font-size: var(--step-1); }
+  .steps p { color: var(--muted); }
+
+  .line-cta {
+    margin-top: clamp(48px, 7vw, 80px);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;
+    padding: 28px 32px; border-radius: 24px; background: var(--niche);
+  }
+  .line-cta p { font-family: var(--serif); font-size: var(--step-1); }
+</style>

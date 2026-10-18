@@ -1,0 +1,104 @@
+---
+import '../styles/global.css';
+import { SITE } from '../lib/site.js';
+
+const { title, description = SITE.tagline } = Astro.props;
+const fullTitle = title ? `${title}｜${SITE.name}` : `${SITE.name}｜手作擴香石與香氛`;
+const path = Astro.url.pathname;
+const isActive = (p) => (p === '/' ? path === '/' : path.startsWith(p));
+---
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <!-- PWA：讓手機可以「加入主畫面」，像 App 一樣打開 -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#3a2433" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content={SITE.name} />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要內容</a>
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="wordmark" href="/">{SITE.name}</a>
+      <nav aria-label="主選單">
+        <a href="/products/" aria-current={isActive('/products') ? 'page' : undefined}>商品</a>
+        <a href="/#story">品牌故事</a>
+        <a href="/#how">怎麼購買</a>
+      </nav>
+      <a class="btn btn--solid line-btn" href={SITE.lineUrl} target="_blank" rel="noopener">加 LINE 好友</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap foot">
+      <div>
+        <p class="foot-name">{SITE.name}</p>
+        <p>{SITE.tagline}</p>
+      </div>
+      <div class="foot-links">
+        <a href={SITE.lineUrl} target="_blank" rel="noopener">LINE 官方帳號</a>
+        <a href={SITE.shopUrl} target="_blank" rel="noopener">賣貨便賣場</a>
+        {SITE.instagramUrl && <a href={SITE.instagramUrl} target="_blank" rel="noopener">Instagram</a>}
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+
+<style>
+  .skip {
+    position: absolute; left: -9999px; top: 8px;
+    background: var(--ink); color: var(--white); padding: 8px 16px; z-index: 10;
+  }
+  .skip:focus { left: 8px; }
+
+  .site-header {
+    position: sticky; top: 0; z-index: 5;
+    background: color-mix(in srgb, var(--plaster) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar {
+    display: flex; align-items: center; gap: 24px;
+    min-height: 72px;
+  }
+  .wordmark {
+    font-family: var(--serif); font-weight: 900; font-size: 1.5rem;
+    letter-spacing: 0.18em; color: var(--ink); text-decoration: none;
+  }
+  nav { display: flex; gap: 4px; margin-left: auto; }
+  nav a {
+    color: var(--ink); text-decoration: none; padding: 10px 14px; border-radius: 999px;
+  }
+  nav a:hover, nav a[aria-current='page'] { background: var(--niche); color: var(--ink); }
+  .line-btn { min-height: 44px; padding-inline: 1.1em; font-size: var(--step--1); }
+
+  @media (max-width: 720px) {
+    .bar { flex-wrap: wrap; gap: 0 12px; padding-block: 10px; }
+    .line-btn { margin-left: auto; }
+    nav { order: 3; width: 100%; margin-left: -14px; }
+  }
+
+  .site-footer { border-top: 1px solid var(--line); padding-block: 48px; color: var(--muted); }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; }
+  .foot-name { font-family: var(--serif); font-weight: 900; font-size: 1.25rem; color: var(--ink); letter-spacing: 0.18em; }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; }
+</style>

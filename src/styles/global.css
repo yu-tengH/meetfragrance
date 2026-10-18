@@ -1,0 +1,104 @@
+:root {
+  --plaster: #f6f2f1;   /* 底色：石膏帶一點粉 */
+  --niche: #ead7d9;     /* 拱窗內的花瓣色 */
+  --ink: #3a2433;       /* 主要文字：深梅色 */
+  --muted: #6c5361;     /* 次要文字 */
+  --mauve: #94415d;     /* 品牌強調色 */
+  --leaf: #5f7d52;      /* 少量點綴：葉綠 */
+  --line: #d8c3c8;
+  --white: #fffdfc;
+
+  --serif: 'Noto Serif TC', 'Songti TC', serif;
+  --sans: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3125rem;
+  --step-2: 1.75rem;
+  --step-3: 2.5rem;
+  --step-4: clamp(3.25rem, 9vw, 6.5rem);
+
+  --wrap: 1120px;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--plaster);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: var(--mauve); text-underline-offset: 0.2em; }
+a:hover { color: var(--ink); }
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  letter-spacing: 0.06em;
+}
+
+p { margin: 0; }
+
+:focus-visible {
+  outline: 3px solid var(--mauve);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--wrap));
+  margin-inline: auto;
+}
+
+/* 按鈕 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 48px;
+  padding: 0.6em 1.5em;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.btn--solid { background: var(--ink); color: var(--white); }
+.btn--solid:hover { background: var(--mauve); border-color: var(--mauve); color: var(--white); }
+.btn--ghost { background: transparent; color: var(--ink); }
+.btn--ghost:hover { background: var(--ink); color: var(--white); }
+
+/* 拱窗：品牌的主要造型，延續市集海報 */
+.niche {
+  position: relative;
+  border-radius: 999px 999px 18px 18px;
+  background: var(--niche);
+  overflow: hidden;
+}
+
+.section { padding-block: clamp(64px, 10vw, 120px); }
+
+.section-title {
+  font-size: var(--step-3);
+  margin-bottom: 0.6em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,15 @@
+---
+// 還沒有照片的商品：顯示線稿小瓶子＋「照片待補」
+---
+<div class="nophoto">
+  <svg aria-hidden="true" viewBox="0 0 80 120" width="72" height="108" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round">
+    <rect x="30" y="6" width="20" height="18" rx="3" />
+    <path d="M26 24h28v10c8 4 14 12 14 22v48a10 10 0 0 1-10 10H22a10 10 0 0 1-10-10V56c0-10 6-18 14-22z" />
+    <path d="M12 70h56" />
+  </svg>
+  <span>照片待補</span>
+</div>
+
+<style>
+  .nophoto { display: grid; justify-items: center; gap: 10px; color: var(--mauve); font-size: var(--step--1); }
+</style>
